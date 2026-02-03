@@ -1,4 +1,4 @@
-import ParametricRoutesPage from 'website/lib/renderer';
+import ParametricRoutesPage from 'cms-renderer/lib/renderer';
 
 export const dynamic = 'force-dynamic';
 
