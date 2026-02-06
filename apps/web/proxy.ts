@@ -1,6 +1,8 @@
 import { createCmsProxy } from 'cms-renderer/lib/proxy';
 
-export const proxy = createCmsProxy({
+type CmsProxyHandler = ReturnType<typeof createCmsProxy>;
+
+export const proxy: CmsProxyHandler = createCmsProxy({
   upstream: "http://localhost:3000",
 });
 

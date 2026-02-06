@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
+import Image from "next/image";
 
 interface NavItem {
   label: string;
@@ -29,12 +31,11 @@ interface HeroContent {
   secondary_button?: { label: string; url: string };
   brand_one?: BrandImage;
   brand_two?: BrandImage;
-  [key: string]: any;
+  [key: string]: string | BrandImage | { label: string; url: string } | undefined;
 }
 
 interface DashboardPreviewContent {
-  image_url?: string;
-  alt?: string;
+  preview?: { alt?: string; _asset?: { url?: string } };
 }
 
 const fontFamily = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
@@ -113,25 +114,6 @@ function LogoIcon() {
   );
 }
 
-function ClaudeIcon() {
-  return (
-    <svg
-      width="40"
-      height="40"
-      viewBox="0 0 40 40"
-      fill="none"
-      style={{ display: "inline-block", verticalAlign: "middle", marginRight: "8px" }}
-    >
-      <path
-        d="M20 4L20 36M4 20L36 20M8.2 8.2L31.8 31.8M31.8 8.2L8.2 31.8"
-        stroke="white"
-        strokeWidth="2.5"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
 export function HeaderBlock({ content }: { content: HeaderContent }) {
   
   const navItems = content["nav_items"] || [];
@@ -168,7 +150,7 @@ export function HeaderBlock({ content }: { content: HeaderContent }) {
           }}
         >
         {/* Logo */}
-        <a
+        <Link
           href="/"
           style={{
             display: "flex",
@@ -178,15 +160,17 @@ export function HeaderBlock({ content }: { content: HeaderContent }) {
           }}
         >
           {logoUrl ? (
-            <img
+            <Image
               src={logoUrl}
               alt={logoAlt}
+              width={100}
+              height={28}
               style={{ height: "28px", width: "auto", display: "block" }}
             />
           ) : (
             <LogoIcon />
           )}
-        </a>
+        </Link>
 
         {/* Nav Items */}
         <div
@@ -196,7 +180,7 @@ export function HeaderBlock({ content }: { content: HeaderContent }) {
             gap: "32px",
           }}
         >
-          {navItems.map((item: any, idx: number) => (
+          {navItems.map((item: NavItem, idx: number) => (
             <a
               key={idx}
               href={item.href || "#"}
@@ -304,6 +288,7 @@ function BrandCycler({ brands }: { brands: BrandImage[] }) {
   if (brands.length === 0) return null;
 
   const brand = brands[index];
+  if (!brand) return null;
 
   return (
     <span
@@ -315,9 +300,11 @@ function BrandCycler({ brands }: { brands: BrandImage[] }) {
         opacity: visible ? 1 : 0,
       }}
     >
-      <img
-        src={`https://profound-store-pull.b-cdn.net/uploads/${brand._asset!.url}.png`}
+      <Image
+        src={`https://profound-store-pull.b-cdn.net/uploads/${brand._asset?.url}.png`}
         alt={brand.alt || "Brand"}
+        width={200}
+        height={48}
         style={{ height: "48px", width: "auto", display: "inline-block", verticalAlign: "middle" }}
       />
     </span>
@@ -328,8 +315,11 @@ export function HeroBlock({ content }: { content: HeroContent }) {
   const heading = content.heading || "Get your brand mentioned by";
   const brands: BrandImage[] = [];
   for (const key of Object.keys(content)) {
-    if (key.startsWith("brand_") && content[key]?._asset?.url) {
-      brands.push(content[key]);
+    if (key.startsWith("brand_")) {
+      const value = content[key];
+      if (value && typeof value === "object" && "_asset" in value && (value as BrandImage)._asset?.url) {
+        brands.push(value as BrandImage);
+      }
     }
   }
   const subtitle =
@@ -457,8 +447,8 @@ export function HeroBlock({ content }: { content: HeroContent }) {
 }
 
 export function DashboardPreviewBlock({ content }: { content: DashboardPreviewContent }) {
-  const imageUrl = content.preview._asset.url || "";
-  const alt = content.preview.alt || "Dashboard preview";
+  const imageUrl = content.preview?._asset?.url || "";
+  const alt = content.preview?.alt || "Dashboard preview";
 
   return (
     <section
@@ -475,9 +465,11 @@ export function DashboardPreviewBlock({ content }: { content: DashboardPreviewCo
         }}
       >
         {imageUrl && (
-          <img
-             src={`https://profound-store-pull.b-cdn.net/uploads/${imageUrl}.png`}
+          <Image
+            src={`https://profound-store-pull.b-cdn.net/uploads/${imageUrl}.png`}
             alt={alt}
+            width={900}
+            height={500}
             style={{
               width: "100%",
               height: "auto",
@@ -690,9 +682,11 @@ export function GetAeoReportBlock({ content }: { content: GetAeoReportContent })
                 marginBottom: "-80px",
               }}
             >
-              <img
+              <Image
                 src={sideImageUrl}
                 alt={sideImageAlt}
+                width={600}
+                height={400}
                 style={{
                   width: "100%",
                   height: "auto",
