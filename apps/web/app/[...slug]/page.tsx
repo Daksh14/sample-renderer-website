@@ -21,7 +21,7 @@ export default async function TemplatePage({ params, searchParams }: PageProps) 
 	return (
 		<ParametricRoutesPage
 			registry={registry}
-      cmsUrl="http://localhost:3000/"
+      cmsUrl="https://cms.dev.tryprofound.com"
       websiteId="79539651-e362-4f54-ba15-608dd267f883"
 			apiKey="sk_NW1mZ9cD9bExJpTPkodLw3rk0sISAwuLHxgod55wG0lPeX"
 			params={Promise.resolve({ slug })}

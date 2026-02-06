@@ -3,7 +3,7 @@ import { createCmsProxy } from 'cms-renderer/lib/proxy';
 type CmsProxyHandler = ReturnType<typeof createCmsProxy>;
 
 export const proxy: CmsProxyHandler = createCmsProxy({
-  upstream: "http://localhost:3000",
+  upstream: "https://cms.dev.tryprofound.com",
 });
 
 export const config = {
