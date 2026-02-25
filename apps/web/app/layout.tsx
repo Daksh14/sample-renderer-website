@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Refresher } from "cms-renderer/lib/refresher";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -14,6 +15,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <Refresher
+          cmsUrl="https://cms.dev.tryprofound.com"
+          websiteId="79539651-e362-4f54-ba15-608dd267f883"
+          apiKey="sk_NW1mZ9cD9bExJpTPkodLw3rk0sISAwuLHxgod55wG0lPeX"
+        />
         {children}
       </body>
     </html>
